@@ -3,6 +3,8 @@
 [![Language: C99](https://img.shields.io/badge/Language-C99-orangered.svg)](https://en.wikipedia.org/wiki/C99)
 <!-- ![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.1411986.svg) -->
 
+# Forked version to also print alignment lengths between pairs using `-l` option. EXPERIMENTAL, use at own risk
+
 # snp-dists
 
 Convert a FASTA alignment to SNP distance matrix

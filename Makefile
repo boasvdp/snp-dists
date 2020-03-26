@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Ofast -std=c99 
 LIBS = -lz -lm
 
-EXE = snp-dists
+EXE = snp-dists-alnlengths
 PREFIX = /usr/local
 TESTDIR = test
 

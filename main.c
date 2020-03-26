@@ -28,6 +28,20 @@ size_t distance(const char* restrict a, const char* restrict b, size_t L)
 }
 
 //------------------------------------------------------------------------
+size_t alnlength(const char* restrict a, const char* restrict b, size_t L)
+{
+  size_t length=0;
+  for (size_t i=0; i < L; i++) {
+    if (a[i] == 'A' || a[i] == 'C' || a[i] == 'T' || a[i] == 'G' || a[i] == 'a' || a[i] == 'c' || a[i] == 't' || a[i] == 'g') {
+      if (b[i] == 'A' || b[i] == 'C' || b[i] == 'T' || b[i] == 'G' || b[i] == 'a' || b[i] == 'c' || b[i] == 't' || b[i] == 'g') {
+        length++;
+      }
+    }
+  }
+  return length;
+}
+
+//------------------------------------------------------------------------
 void show_help(int retcode)
 {
   FILE* out = (retcode == EXIT_SUCCESS ? stdout : stderr);
@@ -44,6 +58,7 @@ void show_help(int retcode)
       "  -m\tOutput MOLTEN instead of TSV\n"
       "  -c\tUse comma instead of tab in output\n"
       "  -b\tBlank top left corner cell\n"
+      "  -l\tPrint alignment lengths between pairs (EXPERIMENTAL)\n"
       "URL\n  %s\n"};
   fprintf(out, str, EXENAME, GITHUB_URL);
   exit(retcode);
@@ -53,8 +68,8 @@ void show_help(int retcode)
 int main(int argc, char* argv[])
 {
   // parse command line parameters
-  int opt, quiet = 0, csv = 0, corner = 1, allchars = 0, keepcase = 0, molten = 0;
-  while ((opt = getopt(argc, argv, "hqcakmbv")) != -1) {
+  int opt, quiet = 0, csv = 0, corner = 1, allchars = 0, keepcase = 0, molten = 0, printlengths = 0;
+  while ((opt = getopt(argc, argv, "hqcakmblv")) != -1) {
     switch (opt) {
       case 'h': show_help(EXIT_SUCCESS); break;
       case 'q': quiet = 1; break;
@@ -63,6 +78,7 @@ int main(int argc, char* argv[])
       case 'k': keepcase = 1; break;
       case 'm': molten = 1; break;
       case 'b': corner = 0; break;
+      case 'l': printlengths = 1; break;
       case 'v': printf("%s %s\n", EXENAME, VERSION); exit(EXIT_SUCCESS);
       default: show_help(EXIT_FAILURE);
     }
@@ -156,6 +172,16 @@ int main(int argc, char* argv[])
     for (int j = 0; j < N; j++) {
       for (int i=0; i < N; i++) {
         size_t d = distance(seq[j], seq[i], L);
+        printf("%s%c%s%c%zu\n", name[j], sep, name[i], sep, d);
+      }
+    }
+  }
+
+  if (printlengths) {
+    // print alignment lengths between pairs
+    for (int j = 0; j < N; j++) {
+      for (int i=0; i < N; i++) {
+        size_t d = alnlength(seq[j], seq[i], L);
         printf("%s%c%s%c%zu\n", name[j], sep, name[i], sep, d);
       }
     }
